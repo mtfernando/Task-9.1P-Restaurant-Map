@@ -5,6 +5,7 @@ package com.example.task91prestaurantmap.Data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.example.task91prestaurantmap.Util.Util;
@@ -43,7 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public List<String> getAllPlaceID(){
+    public String[] getAllPlaceID(){
         SQLiteDatabase db = this.getReadableDatabase();
 
 
@@ -58,15 +59,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         try{
             if(!c.moveToFirst()){
-                return new ArrayList<>();
+                return new String[]{null};
             }
 
-            List<String> placeIDList = new ArrayList<>();
+            String[] placeIDList = new String[(int) DatabaseUtils.queryNumEntries(db, Util.PLACE_TABLE_NAME)];
 
+
+            int insertIndex = 0;
             //do-while moves through each result of the cursor and adds them to the list to be returned later
             do{
                 final String placeID = c.getString(placeIDIndex);
-                placeIDList.add(placeID);
+                placeIDList[insertIndex] = placeID;
+                insertIndex++;
             } while(c.moveToNext());
 
             return placeIDList;
