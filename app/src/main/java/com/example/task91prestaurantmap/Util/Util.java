@@ -10,9 +10,14 @@ public class Util {
 
     public static final String ROW_ID = "row_id";
     public static final String PLACE_ID = "place_id";
+    public static final String ADDRESS = "address";
+    public static final String NAME = "name";
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
 
     //Creating the DATABASE
     public static final String CREATE_PLACES_TABLE = "CREATE TABLE " + PLACE_TABLE_NAME + "("
-            + ROW_ID + " INTEGER AUTO INCREMENT PRIMARY KEY," + PLACE_ID + " TEXT)";
+            + ROW_ID + " INTEGER AUTO INCREMENT PRIMARY KEY," + PLACE_ID + " TEXT," + ADDRESS + " TEXT," +
+            NAME + " TEXT," + LATITUDE + " REAL," + LONGITUDE + " REAL)";
 
 }

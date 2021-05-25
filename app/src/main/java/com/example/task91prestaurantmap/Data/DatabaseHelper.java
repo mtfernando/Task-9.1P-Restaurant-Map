@@ -38,11 +38,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
 
         cv.put(Util.PLACE_ID, place.getId());
+        cv.put(Util.ADDRESS, place.getAddress());
+        cv.put(Util.NAME, place.getName());
+        cv.put(Util.LATITUDE, place.getLatLng().latitude);
+        cv.put(Util.LONGITUDE, place.getLatLng().longitude);
 
         long result = db.insert(Util.PLACE_TABLE_NAME, null, cv);
 
         return result;
     }
+
+//    public Place getPlace(String placeID){
+//
+//    }
 
     public String[] getAllPlaceID(){
         SQLiteDatabase db = this.getReadableDatabase();

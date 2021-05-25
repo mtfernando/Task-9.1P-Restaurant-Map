@@ -114,7 +114,7 @@ public class AddPlaceActivity extends AppCompatActivity {
                     placeResponse.addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             FindCurrentPlaceResponse response = task.getResult();
-                            System.out.println(response.getPlaceLikelihoods().get(0).getPlace().getAddress());
+                            System.out.println(response.getPlaceLikelihoods().get(0).getPlace().getLatLng());
 
                             //Place object of the current location
                             currentPlace = response.getPlaceLikelihoods().get(0).getPlace();
@@ -180,7 +180,6 @@ public class AddPlaceActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     //Set the two edit texts of Place name and Location with details of the given Place object.
