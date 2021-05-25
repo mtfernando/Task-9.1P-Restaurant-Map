@@ -3,6 +3,7 @@ package com.example.task91prestaurantmap;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -12,13 +13,28 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.task91prestaurantmap.Util.Util;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
+
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.content.ContentValues.TAG;
 
 public class AddPlaceActivity extends AppCompatActivity {
     Button savePlaceButton, getLocationButton, showPlaceButton;
@@ -56,8 +72,8 @@ public class AddPlaceActivity extends AppCompatActivity {
         };
 
         //Checking permissions before requesting location updates
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(AddPlaceActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION} ,1);
+        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(AddPlaceActivity.this, new String[] {ACCESS_FINE_LOCATION} ,1);
         }
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
@@ -74,5 +90,6 @@ public class AddPlaceActivity extends AppCompatActivity {
             }
         });
 
+        Places.initialize(getApplicationContext(), Util.PLACES_API_KEY);
     }
 }
