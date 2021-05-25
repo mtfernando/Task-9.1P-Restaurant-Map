@@ -13,17 +13,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:gravity="center"
         android:text=" Place Name appears here"
-        android:textSize="30sp" />
+        android:textColor="#000000"
+        android:textSize="24dp" />
 
     <TextView
         android:id="@+id/locationTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:text="Location - Click me to search"
-        android:textSize="24sp" />
+        android:textSize="16dp" />
 
     <Button
         android:id="@+id/getLocationButton"
