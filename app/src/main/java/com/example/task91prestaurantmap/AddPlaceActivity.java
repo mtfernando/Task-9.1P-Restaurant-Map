@@ -49,8 +49,6 @@ public class AddPlaceActivity extends AppCompatActivity {
     TextView placeNameTextView, locationTextView;
     LocationManager locationManager;
     LocationListener locationListener;
-    Geocoder geocoder;
-    List<Address> addresses;
     double latitude, longitude;
     Place currentPlace;
     DatabaseHelper db;
@@ -68,7 +66,6 @@ public class AddPlaceActivity extends AppCompatActivity {
         showPlaceButton = findViewById(R.id.showOnMapButton);
 
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        geocoder = new Geocoder(this, Locale.getDefault());
 
         db = new DatabaseHelper(this);
 
@@ -157,11 +154,30 @@ public class AddPlaceActivity extends AppCompatActivity {
             }
         });
 
+        //Click text view to open Autocomplete
         locationTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, placeFields).build(AddPlaceActivity.this);
                 startActivityForResult(intent, 100);
+            }
+        });
+
+        //Show map
+        showPlaceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!currentPlace.getId().equals(null)){
+
+                    //List containing place_id to be passed through the intent
+                    String[] placeIDList = new String[] {currentPlace.getId()};
+
+                    //New intent with placeID List
+                    Intent intent = new Intent(AddPlaceActivity.this, MapsActivity.class);
+                    intent.putExtra("placeIDList", placeIDList);
+
+                    startActivity(intent);
+                }
             }
         });
 
