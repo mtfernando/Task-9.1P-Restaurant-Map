@@ -1,11 +1,5 @@
 package com.example.task91prestaurantmap;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -18,17 +12,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.task91prestaurantmap.Util.Util;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -44,6 +45,7 @@ public class AddPlaceActivity extends AppCompatActivity {
     Geocoder geocoder;
     List<Address> addresses;
     double latitude, longitude;
+    Place currentPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class AddPlaceActivity extends AppCompatActivity {
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
 
+        //Get current location and update EditTexts
         getLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,28 +91,38 @@ public class AddPlaceActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
+                //Initializing Places API
                 Places.initialize(getApplicationContext(), Util.PLACES_API_KEY);
                 PlacesClient placesClient = Places.createClient(getApplicationContext());
 
                 // Use fields to define the data types to return.
-                List<Place.Field> placeFields = Collections.singletonList(Place.Field.NAME);
+                List<Place.Field> placeFields = new ArrayList<>();
+                placeFields.add(Place.Field.NAME);
+                placeFields.add(Place.Field.ADDRESS);
+                placeFields.add(Place.Field.LAT_LNG);
 
-// Use the builder to create a FindCurrentPlaceRequest.
+                // Use the builder to create a FindCurrentPlaceRequest.
                 FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
 
-// Call findCurrentPlace and handle the response (first check that the user has granted permission).
+                // Call findCurrentPlace and handle the response (first check that the user has granted permission).
                 if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
+
+                    //Upon receiving a response
                     placeResponse.addOnCompleteListener(task -> {
                         if (task.isSuccessful()){
                             FindCurrentPlaceResponse response = task.getResult();
-                            for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
-                                Log.i(TAG, String.format("Place '%s' has likelihood: %f",
-                                        placeLikelihood.getPlace().getName(),
-                                        placeLikelihood.getLikelihood()));
-                            }
-                        } else {
+                            System.out.println(response.getPlaceLikelihoods().get(0).getPlace().getAddress());
+
+                            //Place object of the current location
+                            currentPlace = response.getPlaceLikelihoods().get(0).getPlace();
+
+                            //Set EditTexts accordingly
+                            placeNameTextView.setText(currentPlace.getName());
+                            locationTextView.setText(currentPlace.getAddress());
+                            System.out.println(currentPlace.getAddress());
+                        }
+                        else {
                             Exception exception = task.getException();
                             if (exception instanceof ApiException) {
                                 ApiException apiException = (ApiException) exception;
