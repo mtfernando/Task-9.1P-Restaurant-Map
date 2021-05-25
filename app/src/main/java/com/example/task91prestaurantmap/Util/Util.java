@@ -3,7 +3,7 @@ package com.example.task91prestaurantmap.Util;
 import com.google.android.libraries.places.api.model.Place;
 
 public class Util {
-    public static final String PLACES_API_KEY = "AIzaSyAn-mWG1W9Rj_CwO3D5wKOvLA4UHVnPY78";
+    public static final String PLACES_API_KEY = "AIzaSyAuuYM85VQZh7Fs1Yw6mcwd2CmjFH8VVf4";
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "places_db";
     public static final String PLACE_TABLE_NAME = "places";

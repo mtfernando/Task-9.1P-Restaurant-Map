@@ -87,9 +87,41 @@ public class AddPlaceActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+
+                Places.initialize(getApplicationContext(), Util.PLACES_API_KEY);
+                PlacesClient placesClient = Places.createClient(getApplicationContext());
+
+                // Use fields to define the data types to return.
+                List<Place.Field> placeFields = Collections.singletonList(Place.Field.NAME);
+
+// Use the builder to create a FindCurrentPlaceRequest.
+                FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
+
+// Call findCurrentPlace and handle the response (first check that the user has granted permission).
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
+                    placeResponse.addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            FindCurrentPlaceResponse response = task.getResult();
+                            for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
+                                Log.i(TAG, String.format("Place '%s' has likelihood: %f",
+                                        placeLikelihood.getPlace().getName(),
+                                        placeLikelihood.getLikelihood()));
+                            }
+                        } else {
+                            Exception exception = task.getException();
+                            if (exception instanceof ApiException) {
+                                ApiException apiException = (ApiException) exception;
+                                Log.e(TAG, "Place not found: " + apiException.getStatusCode());
+                            }
+                        }
+                    });
+                } else {
+                    ActivityCompat.requestPermissions(AddPlaceActivity.this, new String[] {ACCESS_FINE_LOCATION} ,1);
+                }
             }
         });
 
-        Places.initialize(getApplicationContext(), Util.PLACES_API_KEY);
     }
 }
