@@ -170,11 +170,11 @@ public class AddPlaceActivity extends AppCompatActivity {
                 if(!currentPlace.getId().equals(null)){
 
                     //List containing place_id to be passed through the intent
-                    String[] placeIDList = new String[] {currentPlace.getId()};
+                    String placeID = currentPlace.getId();
 
                     //New intent with placeID List
                     Intent intent = new Intent(AddPlaceActivity.this, MapsActivity.class);
-                    intent.putExtra("placeIDList", placeIDList);
+                    intent.putExtra("placeID", placeID);
 
                     startActivity(intent);
                 }

@@ -9,6 +9,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.example.task91prestaurantmap.Util.Util;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,16 +49,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-//    public Place getPlace(String placeID){
-//
-//    }
+    //Return LatLng object for a given placeID
+    public LatLng getLatLng(String placeID){
+        double latitude, longitude;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        //Query for getting row with given placeID.
+        final String GET_PLACE = "SELECT * FROM " + Util.PLACE_TABLE_NAME + " WHERE " + Util.PLACE_ID + " = \"" + placeID + "\"";
+
+        Cursor c = db.rawQuery(GET_PLACE, null);
+
+        //Cursor Indices for Latitude and Longitude
+        final int latIndex = c.getColumnIndex(Util.LATITUDE);
+        final int longIndex = c.getColumnIndex(Util.LONGITUDE);
+
+        //Set Latitude and Longitude if Cursor is not empty
+        if(c.moveToFirst()){
+            latitude = c.getDouble(latIndex);
+            longitude = c.getDouble(longIndex);
+        }
+        else{
+            return new LatLng(-1, -1);
+        }
+
+        //Return LatLng object
+        return new LatLng(latitude, longitude);
+    }
+
+    //Return Name  for a given placeID
+    public String getName(String placeID){
+        String name;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        //Query for getting row with given placeID.
+        final String GET_PLACE = "SELECT * FROM " + Util.PLACE_TABLE_NAME + " WHERE " + Util.PLACE_ID + " = \"" + placeID + "\"";
+
+        Cursor c = db.rawQuery(GET_PLACE, null);
+
+        //Cursor Indices for Latitude and Longitude
+        final int nameIndex = c.getColumnIndex(Util.NAME);
+
+        //Set Latitude and Longitude if Cursor is not empty
+        if(c.moveToFirst()){
+            name = c.getString(nameIndex);
+        }
+        else{
+            return null;
+        }
+
+        //Return LatLng object
+        return name;
+    }
 
     public String[] getAllPlaceID(){
         SQLiteDatabase db = this.getReadableDatabase();
 
 
 
-        //SQL for getting all PLACE_IDs
+        //Query for getting all PLACE_IDs
         final String GET_ALL_PLACES = "SELECT " + Util.PLACE_ID + " FROM " + Util.PLACE_TABLE_NAME;
 
         //Cursor object with all place IDs

@@ -16,6 +16,7 @@ public class Util {
     public static final String LONGITUDE = "longitude";
 
     //Creating the DATABASE
+    //All Places.Fields stored for MapsActivity to set Markers properly.
     public static final String CREATE_PLACES_TABLE = "CREATE TABLE " + PLACE_TABLE_NAME + "("
             + ROW_ID + " INTEGER AUTO INCREMENT PRIMARY KEY," + PLACE_ID + " TEXT," + ADDRESS + " TEXT," +
             NAME + " TEXT," + LATITUDE + " REAL," + LONGITUDE + " REAL)";
