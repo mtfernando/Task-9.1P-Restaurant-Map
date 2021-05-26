@@ -174,7 +174,7 @@ public class AddPlaceActivity extends AppCompatActivity {
                     double placeLat = currentPlace.getLatLng().latitude;
                     double placeLong = currentPlace.getLatLng().longitude;
 
-                    //New intent with placeID List
+                    //New intent with placeID, placeLat, and placeLong
                     Intent intent = new Intent(AddPlaceActivity.this, MapsActivity.class);
                     intent.putExtra("placeID", placeID);
                     intent.putExtra("placeLat", placeLat);

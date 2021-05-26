@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     Button newPlaceButton, showPlacesButton;
     LocationListener locationListener;
     LocationManager locationManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
