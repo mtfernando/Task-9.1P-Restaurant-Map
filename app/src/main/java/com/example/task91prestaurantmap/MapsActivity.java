@@ -51,7 +51,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //Adding Marker with LatLng and Title from DB given the Place ID.
             mMap.addMarker(new MarkerOptions().position(db.getLatLng(placeID)).title(db.getName(placeID)));
             System.out.println(db.getName(placeID));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(db.getLatLng(placeID)));
+            //Move the camera to the user's location and zoom in!
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(db.getLatLng(placeID), 12.0f));
         }
 
         //TODO: Implement Method to show all saved location markers
